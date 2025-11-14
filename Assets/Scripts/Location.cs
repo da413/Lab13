@@ -5,12 +5,14 @@ using UnityEngine.Rendering;
 
 public class Location
 {
-    string cityName, cityCode, countryCode;
+    public string cityName;
+    public string lat;
+    public string lon;
 
-    public Location(string cityName, string cityCode, string countryCode)
+    public Location(string cityName, string lat, string lon)
     {
         this.cityName = cityName;
-        this.cityCode = cityCode;
-        this.countryCode = countryCode;
+        this.lat = lat;
+        this.lon = lon;
     }
 }
