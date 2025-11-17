@@ -114,6 +114,37 @@ public class WeatherManager : MonoBehaviour
         Debug.Log("Weather Data Updated:");
         Debug.Log($"City: {currentCityName}, Temp: {currentTemperature}, Conditions: {currentWeatherConditions}, Time: {currentTime}");
         Debug.Log($"Time INT (minutes since midnight): {currentTimeINT}");
+
+
+        //exposure of light during day, exclud evening, sunrise, or night
+        switch (dateTime.Hour)
+        {
+            case 9:  //start at 0.7
+                RenderSettings.skybox.SetFloat("_Exposure", 0.8f);
+                break;
+            case 10:
+                RenderSettings.skybox.SetFloat("_Exposure", 0.9f);
+                break;
+            case 11: //increment 0.1 up
+                RenderSettings.skybox.SetFloat("_Exposure", 1f);
+                break;
+            case 12: //brightest point
+                RenderSettings.skybox.SetFloat("_Exposure", 1.1f);
+                break;
+            case 13: //increment 0.1 down
+                RenderSettings.skybox.SetFloat("_Exposure", 1f);
+                break;
+            case 14:
+                RenderSettings.skybox.SetFloat("_Exposure", 0.8f);
+                break;
+            case 15:
+                RenderSettings.skybox.SetFloat("_Exposure", 0.7f);
+                break;
+        }
+        
+        
+        
+        
         
         //check for clear sky and time of day
         if(currentWeatherConditions == "clear sky" && dateTime.Hour >= 12 && dateTime.Hour <= 8)
@@ -141,7 +172,7 @@ public class WeatherManager : MonoBehaviour
         {
             RenderSettings.skybox = WeatherConditionSkyBoxes[4];
         }
-        else if(currentWeatherConditions == "few clouds" || currentWeatherConditions == "scattered clouds" || currentWeatherConditions == "broken clouds" || currentWeatherConditions == "overcast clouds")
+        else if(currentWeatherConditions == "few clouds" || currentWeatherConditions == "scattered clouds" || currentWeatherConditions == "broken clouds" || currentWeatherConditions == "overcast clouds" || currentWeatherConditions == "mist" || currentWeatherConditions == "fog")
         {
             RenderSettings.skybox = WeatherConditionSkyBoxes[3];
         }
