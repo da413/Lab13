@@ -48,6 +48,9 @@ public class WeatherManager : MonoBehaviour
 
     private string[] LocationURLs = new string[5];
 
+    [SerializeField] private Material[] WeatherConditionSkyBoxes = new Material[4];
+    [SerializeField] private Material[] TimeOfDaySkyBoxes = new Material[4];
+
     private void Awake()
     {
         for (int i = 0; i < Locations.Length; i++)
@@ -111,6 +114,72 @@ public class WeatherManager : MonoBehaviour
         Debug.Log("Weather Data Updated:");
         Debug.Log($"City: {currentCityName}, Temp: {currentTemperature}, Conditions: {currentWeatherConditions}, Time: {currentTime}");
         Debug.Log($"Time INT (minutes since midnight): {currentTimeINT}");
+
+
+        //exposure of light during day, exclud evening, sunrise, or night
+        switch (dateTime.Hour)
+        {
+            case 9:  //start at 0.7
+                RenderSettings.skybox.SetFloat("_Exposure", 0.8f);
+                break;
+            case 10:
+                RenderSettings.skybox.SetFloat("_Exposure", 0.9f);
+                break;
+            case 11: //increment 0.1 up
+                RenderSettings.skybox.SetFloat("_Exposure", 1f);
+                break;
+            case 12: //brightest point
+                RenderSettings.skybox.SetFloat("_Exposure", 1.1f);
+                break;
+            case 13: //increment 0.1 down
+                RenderSettings.skybox.SetFloat("_Exposure", 1f);
+                break;
+            case 14:
+                RenderSettings.skybox.SetFloat("_Exposure", 0.8f);
+                break;
+            case 15:
+                RenderSettings.skybox.SetFloat("_Exposure", 0.7f);
+                break;
+        }
+        
+        
+        
+        
+        
+        //check for clear sky and time of day
+        if(currentWeatherConditions == "clear sky" && dateTime.Hour >= 12 && dateTime.Hour <= 8)
+        {
+           RenderSettings.skybox = TimeOfDaySkyBoxes[0];
+        }
+        else if(currentWeatherConditions == "clear sky" && dateTime.Hour >= 9 && dateTime.Hour <= 15)
+        {
+            RenderSettings.skybox = TimeOfDaySkyBoxes[1];
+        }
+        else if(currentWeatherConditions == "clear sky" && dateTime.Hour >= 16 && dateTime.Hour <= 18)
+        {
+            RenderSettings.skybox = TimeOfDaySkyBoxes[2];
+        }
+        else if(currentWeatherConditions == "clear sky" && dateTime.Hour >= 19 && dateTime.Hour <= 24)
+        {
+            RenderSettings.skybox = TimeOfDaySkyBoxes[3];
+        }
+        //check for weather conditions
+        else if(currentWeatherConditions == "light rain" || currentWeatherConditions == "moderate rain" || currentWeatherConditions == "heavy intensity rain" || currentWeatherConditions == "very heavy rain")
+        {
+            RenderSettings.skybox = WeatherConditionSkyBoxes[1];
+        }
+        else if(currentWeatherConditions == "light snow" || currentWeatherConditions == "snow" || currentWeatherConditions == "heavy snow")
+        {
+            RenderSettings.skybox = WeatherConditionSkyBoxes[4];
+        }
+        else if(currentWeatherConditions == "few clouds" || currentWeatherConditions == "scattered clouds" || currentWeatherConditions == "broken clouds" || currentWeatherConditions == "overcast clouds" || currentWeatherConditions == "mist" || currentWeatherConditions == "fog")
+        {
+            RenderSettings.skybox = WeatherConditionSkyBoxes[3];
+        }
+       
+            
+            
+        
     }
 
     private IEnumerator CallAPI(string url, Action<string> callback) 
