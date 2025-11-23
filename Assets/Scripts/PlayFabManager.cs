@@ -30,8 +30,7 @@ public class PlayFabManager: MonoBehaviour
     //Example method for triggering email login
     public void EmailLoginButtonClicked()
     {
-        
-        userEmail = email.ToString();
+        userEmail = email.text;
         loginManager.SetLoginMethod(new EmailLogin(email.text, password.text));
         loginManager.Login(OnLoginSuccess, OnLoginFailure);
     }

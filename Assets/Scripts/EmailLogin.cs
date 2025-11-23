@@ -19,8 +19,8 @@ public class EmailLogin: ILogin
         {
             Email = email,
             Password = password
-
         };
+        
         PlayFabClientAPI.LoginWithEmailAddress(request, onSuccess, onFailure);
     }
 }

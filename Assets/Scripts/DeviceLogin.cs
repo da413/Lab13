@@ -15,8 +15,9 @@ public class DeviceLogin : ILogin
         var request = new LoginWithCustomIDRequest
         {
             CustomId = deviceID,
-            CreateAccount = true //creat account if not exists
+            CreateAccount = true //create account if does not exist
         };
+        
         PlayFabClientAPI.LoginWithCustomID(request, onSuccess, onFailure);
     }
 }
